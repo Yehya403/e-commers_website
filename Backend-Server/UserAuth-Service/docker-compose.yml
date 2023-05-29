@@ -2,15 +2,19 @@ version: "3.8"
 
 services:
   mongo_db:
-    container_name: db_container
     image: mongo:latest
+    ports:
+      - 27017:27017
+    container_name: db_container
     restart: always
     volumes:
       - mongo_db:/data/db
 
   redis_db:
-    container_name: db_container
     image: redis:latest
+    ports:
+      - 6379:6379
+    container_name: db_container
     restart: always
     volumes:
       - redis_db:/data/db

@@ -22,14 +22,14 @@ services:
     ports:
       - "3000:3000"
 
-  db:
+  mongo_db:
     image: mongo:latest
     ports:
       - "27017:27017"
     volumes:
       - mongo_db:/data/db
 
-  cachedb:
+  redis_db:
     image: redis:latest
     ports:
       - "6379:6379"
