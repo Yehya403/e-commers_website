@@ -1,0 +1,122 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
+
+.box:hover {
+  box-shadow: 2px 5px 10px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+* {
+  margin: 0;
+}
+
+.sakr {
+  text-align: center;
+  line-height: 50px;
+  height: 50px;
+  width: 250px;
+  cursor: pointer;
+}
+
+
+
+.sakr-two {
+  color: #FFF;
+  transition: all 0.5s;
+  position: relative;
+  text-align: center;
+}
+
+.sakr-two span {
+  z-index: 2;
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.sakr-two::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transition: all 0.5s;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sakr-two::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  transition: all 0.5s;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.sakr-two:hover::before {
+  transform: rotate(-45deg);
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.sakr-two:hover::after {
+  transform: rotate(45deg);
+  background-color: rgba(255, 255, 255, 0);
+}
+
+.box-2 {
+  background-color: #3C3C3C;
+}
+
+
+
+
+.cartbg {
+  background-color: rgb(255, 248, 240);
+}
+
+
+.networkStatus {
+  position: fixed;
+  bottom: 40px;
+  height: 40px;
+  right: 40px;
+  background-color: bisque;
+  text-align: center;
+  color: black;
+  border-radius: 10%;
+}
+
+
+
+.widthoo{
+  width: 99%;
+}
+
+
+#light{
+  background-color: #FFF;
+}
+#black{
+background-color: darkcyan;
+}
