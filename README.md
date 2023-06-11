@@ -7,7 +7,6 @@ This is an e-commerce website built using React.js for the frontend and Node.js 
 - User registration and authentication
 - Product catalog with search and filtering options
 - Shopping cart functionality
-- Checkout process with payment integration
 
 ## Prerequisites
 
