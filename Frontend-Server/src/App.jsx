@@ -15,7 +15,7 @@ import CounterContextProvider from './Context/CounterContext'
 import CartContextProvider from './Context/CartContext'
 import AllOrder from './Component/AllOrder/AllOrder'
 import CheckOut from './Component/CheckOut/CheckOut'
-import DarkMood from './DarkMood'
+import CheckOutNew from './Component/CheckOutNew/Checkout'
 import { Toaster } from 'react-hot-toast';
 
 
@@ -25,9 +25,6 @@ import { Toaster } from 'react-hot-toast';
 export default function App() {
 
   let [userData, setUserData] = useState(null);
-
-
-
 
   function saveUserData() {
     let encode = localStorage.getItem("userToken")
@@ -70,6 +67,14 @@ export default function App() {
             <ProtectedRoutes>
               <Home />
             </ProtectedRoutes>
+        },
+        {
+          path: "checkoutnew", element:
+
+            <ProtectedRoutes>
+              <CheckOutNew />
+            </ProtectedRoutes>
+
         },
         {
           path: "about", element:
@@ -124,13 +129,13 @@ export default function App() {
 
 
   return <CartContextProvider>
-    <DarkMood />
-    <Toaster></Toaster>
+    <CounterContextProvider>
+      <Toaster></Toaster>
 
+      <RouterProvider router={routes} >
 
-    <RouterProvider router={routes} >
-
-    </RouterProvider>
+      </RouterProvider>
+    </CounterContextProvider>
   </CartContextProvider>
 
 

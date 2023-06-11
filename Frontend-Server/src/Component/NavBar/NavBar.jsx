@@ -1,13 +1,25 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import style from './NavBar.module.css';
 import { CartContext } from '../../Context/CartContext';
+import jwtDecode from 'jwt-decode'
 
 
 export default function NavBar({ userdata, userData, LogOut }) {
     let { numOfCartItems } = useContext(CartContext);
 
+    var decoded;
+    if (localStorage.getItem("userToken")) {
 
+
+      let encode = localStorage.getItem("userToken")
+
+      decoded = jwtDecode(encode)
+      console.log(decoded);
+
+      console.log(decoded.name);
+
+  }
 
     localStorage.setItem('userID', userData ? userData.id : '');
 
@@ -32,14 +44,15 @@ export default function NavBar({ userdata, userData, LogOut }) {
                                                             Home
                                                         </Link>
                                                     </li>
+                                                    
                                                     <li className="nav-item">
-                                                        <Link className="nav-link active" to={'/about'}>
-                                                            About
+                                                        <Link className="nav-link active" to={'/product'}>
+                                                            Profile
                                                         </Link>
                                                     </li>
                                                     <li className="nav-item">
-                                                        <Link className="nav-link active" to={'/product'}>
-                                                            Product
+                                                        <Link className="nav-link active" to={'/checkoutnew'}>
+                                                            CheckOut
                                                         </Link>
                                                     </li>
                                                 </ul>
@@ -52,21 +65,14 @@ export default function NavBar({ userdata, userData, LogOut }) {
                                                     <li className="nav-item d-flex justify-content-center align-content-center">
                                                         <div className="d-flex align-content-between align-items-center">
                                                             <i className="fa-solid fa-hands-clapping px-2"></i>
-                                                            <p style={{ margin: '0', color: 'gray' }}>HI</p>
+                                                            <p style={{ margin: '0', color: 'gray' }}>HI {decoded.name}</p>
                                                             <span className="nav-link active cursor-pointer" onClick={LogOut}>
                                                                 Logout
                                                             </span>
                                                         </div>
                                                     </li>
-                                                    <li className="nav-item  d-flex  ">
-                                                        <Link className="nav-link active" to={'/cart'}>
-                                                            <i className="fa fa-shopping-cart"></i>
-
-
-                                                            <div className="badge bg-success position-absolute top-0 end-1">
-                                                                {numOfCartItems}
-                                                            </div>
-                                                        </Link> 
+                                                    <li className="nav-item">
+                                                     
                                                     </li>
                                                 </>
                                             ) : (

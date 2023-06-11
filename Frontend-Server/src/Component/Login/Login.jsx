@@ -6,6 +6,7 @@ import * as Yup from 'yup'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import {Helmet} from "react-helmet";
+import video from '../video/IBQ7ISUBQHLH9P5W.mp4'
 
 
 export default function Login({ saveUserData }) {
@@ -23,7 +24,7 @@ export default function Login({ saveUserData }) {
     async function login(values) {
         setisLoding(true);
         setErrorMessage(null)
-        let data = await axios.post('https://route-ecommerce-app.vercel.app/api/v1/auth/signin', values).catch((err) => {
+        let data = await axios.post('http://localhost:5000/auth/login', values).catch((err) => {
 
             setisLoding(false);
             console.log(data);
@@ -31,7 +32,7 @@ export default function Login({ saveUserData }) {
             setErrorMessage(err.response.data.message)
         })
 
-        if (data.data.message === 'success') {
+        if (data.data.message === 'Logged Succesfully') {
             console.log(data.data.message);
             localStorage.setItem("userToken", data.data.token)
 
@@ -69,6 +70,19 @@ export default function Login({ saveUserData }) {
 
     return (<>
     
+    <video 
+    
+    autoPlay
+    loop
+    muted
+    className='w-75 position-absolute  '
+    style={{
+        zIndex:'-1'
+    }}
+    >
+<source  src={video}  type='video/mp4' />
+
+    </video>
     
     <Helmet>
                 <meta charSet="utf-8" />

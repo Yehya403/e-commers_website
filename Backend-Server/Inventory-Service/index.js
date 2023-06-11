@@ -1,10 +1,13 @@
 const express = require("express");
+var cors = require('cors')
 const app = express();
-const PORT = process.env.PORT || 6000;
+const PORT = process.env.PORT || 7000;
 const mongoose = require("mongoose");
 const Product = require("./Product"); // Import Product Schema database
 const Redis = require("ioredis");
 const default_expiration = 3600;
+app.use(cors())
+
 
 // Redis setup
 const redisClient = new Redis({
@@ -139,7 +142,6 @@ app.get("/products", async (req, res) => {
 });
 
 app.get("/products/:productId", async (req, res) => {
-  //ID that you want to update
   const productId = req.params.productId; //object contain the requested id
   try {
     const product = await getOrSetCache(`product:${productId}`, async () => {

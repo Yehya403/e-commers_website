@@ -1,21 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
-// import styel from './ProductDetails.module.css';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import Slider from "react-slick";
 import { CartContext } from '../../Context/CartContext';
 import {Helmet} from "react-helmet";
 import toast from 'react-hot-toast';
 
-
-
-
-
 export default function ProductDetails() {
 
-    let { createCart } = useContext(CartContext)
+    const { createCart, cartItems, setCartItems } = useContext(CartContext);
 
-    var settings = {
+    const [product, setProduct] = useState({});
+    const [totalPrice, setTotalPrice] = useState(0); //Modified
+
+
+    let { id } = useParams();
+
+    const settings = {
         dots: true,
         infinite: true,
         speed: 500,
@@ -23,78 +23,81 @@ export default function ProductDetails() {
         slidesToScroll: 1
     };
 
-    let { id } = useParams();
-    console.log(id);
-
-    const [supCategores, setSupCategores] = useState([]);
-
-
-
-    async function generateCart(productId) {
-        let res = await createCart(productId)
-        console.log(res, 'from fcomponent');
-        console.log(res.data.status);
-        if (res.data.status == "success") {
-            toast.success(res.data.message ,
-                {
-                    position:'bottom-right',
-                    className:'box-shadow  '
-                })
-        }else{
-            toast.error(res.data.message ,
-                {
-                    position:'bottom-right',
-                    className:'box-shadow  '
-                })
+    async function getProduct() {
+        try {
+            const response = await axios.get(`http://localhost:7000/products/${id}`);
+            setProduct(response.data);
+        } catch (error) {
+            console.log(error);
         }
     }
 
-    async function supCategoru() {
-        let response = await axios.get(`https://route-ecommerce-app.vercel.app/api/v1/products/${id}`);
-        let data = response.data.data;
-        setSupCategores(data);
-        console.log(supCategores);
-    }
-
     useEffect(() => {
-        supCategoru();
-    }, []);
+        getProduct();
+    }, [id]);
+//     useEffect(() => {
+//     setTotalPrice(totalPrice + product.price);
+// }, [product]);
+
+
+    const handleAddToCart = async () => {
+        try {
+            await createCart(product._id);
+            toast.success(`${product.title} added to cart!`, {
+                position: "bottom-right",
+                className: "box-shadow",
+            });
+            setCartItems(cartItems + 1);
+            setTotalPrice(totalPrice + product.price); //MModified
+        } catch (error) {
+            toast.error("Failed to add product to cart", {
+                position: "bottom-right",
+                className: "box-shadow",
+            });
+        }
+    };
 
     return (
         <>
-
-
-
             <Helmet>
                 <meta charSet="utf-8" />
-                <title>My Title</title>
+                <title>{product.title}</title>
                 <link rel="canonical" href="http://mysite.com/example" />
             </Helmet>
             <div className="container mt-5">
                 <div className="row align-items-center">
                     <div className="col-md-4">
-                        <Slider {...settings}>
-                            {supCategores.images && supCategores.images.map((img) => (
-                                <div key={img}>
-                                    <img className='w-100' src={img} alt="" />
-                                </div>
-                            ))}
-                        </Slider>
+                        <img className="w-100" src={product.imageUrl} alt="" />
                     </div>
                     <div className="col-md-8">
-                        <h1>{supCategores.title}</h1>
-                        <p>{supCategores.description}</p>
+                        <h1>{product.title}</h1>
+                        <p>{product.description}</p>
                         <div className="d-flex justify-content-between mt-2">
-                            <p>{supCategores.price}EGP</p>
-                            <div className="d-flex">
-                                <h6>{supCategores.ratingsAverage}</h6>
-                                <i className='fa fa-star text-warning '></i>
-                            </div>
-                        </div>
-                        <button onClick={() => generateCart(id)} className='btn btn-success w-100 text-white mt-2'>+ Add</button>
-                    </div>
+              <p>{product.price}EGP</p>
+              <div className="d-flex">
+                <h6 className='d-flex mb-3'>{product.ratingAverage}</h6>
+                <i className="fa fa-star text-warning d-flex"></i>
+                <div>
+                <h3>Total: {totalPrice} EGP</h3>
+                <button className="btn btn-primary" onClick={handleAddToCart}>
+                  Add to Cart
+                </button>
                 </div>
+              </div>
+            </div>
+           
+                    </div>
+                  
+                </div>
+            </div>
+            <div className="container mt-5">
+                <p>You have selected {cartItems} products</p>
+                <p>Total Price: {totalPrice} EGP</p>
             </div>
         </>
     );
 }
+
+
+
+

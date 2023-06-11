@@ -1,152 +1,62 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { createContext, useState } from 'react';
+const CartContext = createContext();
 
-const { createContext } = require("react");
+function CartContextProvider(props) {
 
+    const [cart, setCart] = useState([]);
 
-// https://route-ecommerce-app.vercel.app/
+    const [cartItems, setCartItems] = useState(0);
 
+    async function createCart(id) {
+        try {
+            const response = await fetch(`http://localhost:6000/carts`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productId: id }),
+            });
 
+            const data = await response.json();
 
-export let CartContext = createContext(0)
+            setCart([...cart, data]);
 
-
-
-export default function CartContextProvider(props) {
-
-
-    const [numOfCartItems, setCartItem] = useState(0)
-    const [cartID, setCartID] = useState(null)
-
-
-
-    useEffect(() => {
-        getInitialValue()
-    }, [])
-
-
-
-    // async function getuserDetails(id) {
-    //     let res = await axios.get(`https://route-ecommerce-app.vercel.app/api/v1/users/${id}`)
-    //     console.log(res);
-    // }
-
-
-
-
-
-
-
-    async function getInitialValue() {
-        let { data } = await getAllCart();
-        console.log(data, 'from 7anaka');
-        console.log(data.data._id, data.numOfCartItems, 'sakoor');
-        if (data.status == 'success') {
-            setCartItem(data.numOfCartItems)
-            setCartID(data.data._id)
+        } catch (error) {
+            console.log(error);
         }
     }
 
-
-
-
-
-
-    function getAllCart() {
-        return axios.get('https://route-ecommerce-app.vercel.app/api/v1/cart',
-            {
-                headers: {
-                    token: localStorage.getItem("userToken")
-                }
-            }).then(res => res)
-            .catch(err => err)
-
+    async function getCart() {
+        try {
+            const response = await fetch('http://localhost:6000/carts');
+            const data = await response.json();
+            setCart(data);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
+    async function deleteCartItem(id) {
+        try {
+            await fetch(`http://localhost:6000/carts/${id}`, {
+                method: 'DELETE',
+            });
 
-    function createCart(productId) {
-        console.log(productId);
+            const newCart = cart.filter((item) => item._id !== id);
+            setCart(newCart);
 
-        return axios.post('https://route-ecommerce-app.vercel.app/api/v1/cart', { productId: productId },
-            {
-                headers: {
-                    token: localStorage.getItem('userToken')
-                }
+            setCartItems(cartItems - 1);
 
-            }).then(res => res)
-            .catch(err => err)
+        } catch (error) {
+            console.log(error);
+        }
     }
 
-
-
-
-
-    function updateCart(id, count) {
-
-        return axios.put(`https://route-ecommerce-app.vercel.app/api/v1/cart/${id}`, { count },
-            {
-                headers: {
-                    token: localStorage.getItem('userToken')
-                }
-
-            }).then(res => res)
-            .catch(err => err)
-    }
-
-
-
-
-    function removeCartData(id) {
-
-        return axios.delete(`https://route-ecommerce-app.vercel.app/api/v1/cart/${id}`,
-            {
-                headers: {
-                    token: localStorage.getItem('userToken')
-                }
-
-            }).then(res => res)
-            .catch(err => err)
-    }
-
-
-    function clearCart(id) {
-
-        return axios.delete(`https://route-ecommerce-app.vercel.app/api/v1/cart`,
-            {
-                headers: {
-                    token: localStorage.getItem('userToken')
-                }
-
-            }).then(res => res)
-            .catch(err => err)
-    }
-
-    function generateOnlinePayment(cart, shippingAddress) {
-        return axios.post(`https://route-ecommerce-app.vercel.app/api/v1/orders/checkout-session/${cart}?url=http://localhost:3000`,
-            { shippingAddress: shippingAddress },
-            {
-                headers: {
-                    token: localStorage.getItem('userToken')
-                }
-
-            }).then(res => res)
-            .catch(err => err)
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-    const [cart, setCart] = useState([])
-    return <CartContext.Provider value={{  setCartItem, numOfCartItems, cartID, cart, createCart, getAllCart, updateCart, removeCartData, clearCart, generateOnlinePayment }} >
-        {props.children}
-    </CartContext.Provider>
-
+    return (
+        <CartContext.Provider value={{ cart, createCart, getCart, deleteCartItem, cartItems, setCartItems }}>
+            {props.children}
+        </CartContext.Provider>
+    );
 }
+
+export { CartContext, CartContextProvider as default };

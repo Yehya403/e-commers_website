@@ -19,7 +19,7 @@ export default function Register() {
     async function register(values) {
         setisLoding(true);
         setErrorMessage(null)
-        let data = await axios.post('https://route-ecommerce-app.vercel.app/api/v1/auth/signup', values).catch((err) => {
+        let data = await axios.post('http://127.0.0.1:5000/auth/register', values).catch((err) => {
 
             setisLoding(false);
 
@@ -28,7 +28,7 @@ export default function Register() {
         console.log(data);
         console.log(values.id);
         console.log(data.data.message);
-        if (data.data.message == 'success') {
+        if (data.data.message == 'User created successfully') {
             setisLoding(false)
             navigate("/login")
         }
